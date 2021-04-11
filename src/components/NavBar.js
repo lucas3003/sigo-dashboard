@@ -8,21 +8,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Test from './Test';
-import TestTwo from './TestTwo';
+import Index from './Index';
 import SupplyTable from './SupplyTable';
 import SaleTable from './SaleTable';
+import ProductionTable from './ProductionTable';
+import ProductTable from './ProductTable';
 
 
 import {
@@ -137,12 +132,6 @@ class MiniDrawer extends React.Component {
         const { anchorEl } = this.state;
         const menu = [
             {
-                label: 'Parâmetros',
-                comp: <Test />,
-                to: '/',
-                icon: 'fa fa-list'
-            },
-            {
                 label: 'Vendas',
                 comp: <SaleTable />,
                 to: '/sale',
@@ -156,9 +145,15 @@ class MiniDrawer extends React.Component {
             },
             {
                 label: 'Produção',
-                comp: <Test />,
-                to: '/test',
-                icon: 'fas fa-tshirt'
+                comp: <ProductionTable />,
+                to: '/production',
+                icon: 'fa fa-industry'
+            },
+            {
+                label: 'Produto',
+                comp: <ProductTable />,
+                to: '/product',
+                icon: 'fa fa-product-hunt'
             }
         ];
         const open = Boolean(anchorEl);
@@ -218,7 +213,7 @@ class MiniDrawer extends React.Component {
                             <ListItem >
                                 <ListItemIcon>
                                 </ListItemIcon>
-                                <ListItemText primary="Módulo Industrial" />
+                                <ListItemText primary="Módulo Indústrial" />
                             </ListItem>
                             {menu.map((element) =>
                                 <Link to={element.to} >
@@ -236,6 +231,9 @@ class MiniDrawer extends React.Component {
                         <div className={classes.toolbar} />
 
                         <Switch>
+                            <Route exact path='/'>
+                                    <Index />
+                            </Route>    
                             {menu.map((element) => 
                                 <Route exact path={element.to}>
                                     {element.comp}

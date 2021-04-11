@@ -12,22 +12,44 @@ import TableRow from '@material-ui/core/TableRow';
 import {config} from '../config';
 
 import CustomTableHead from './CustomTableHead';
+import SendToProduction from './SendToProduction';
 
-
+import find from 'lodash/find';
 
 class SaleTable extends React.Component {
     state = {
         sales: []
     }
 
-    componentDidMount() {
-        
-        axios.get(`${config.serverUrl}/sales`)
-            .then(res => {
-                const sales = res.data;
-                //Buscar nome do produto
-                this.setState({sales});
-            })
+    async getAllSales() {
+        const salesRequest = await axios.get(`${config.serverUrl}/sales`);
+        this.setState({sales: salesRequest.data});
+        await this.getProductDescriptions();
+
+    }
+
+    //TODO: Move this method to a bigger scope, it might be useful for other contexts
+    async getProductDescriptions() {
+        const sales = this.state.sales;
+
+        //TODO: Request for only products that are parte of a sale
+        const productRequest = await axios.get(`${config.serverUrl}/product`);
+
+        sales.forEach((sale, index, salesArray) => {
+            const product = find(productRequest.data, (product) => product.id === sale.productId);
+            salesArray[index].product = product.description;
+            
+        });
+
+        this.setState({sales});
+    }
+
+    async componentDidMount() {
+        await this.getAllSales();
+    }
+
+    async refresh() {
+        await this.getAllSales();
     }
 
 
@@ -48,7 +70,7 @@ class SaleTable extends React.Component {
                                     <TableCell align="center">{row.soldUnits}</TableCell>
                                     <TableCell align="center">{row.unitAmount.toFixed(2)}</TableCell>
                                     <TableCell align="center">{(row.unitAmount*row.soldUnits).toFixed(2)}</TableCell>
-                                    <TableCell align="center">{row.sentToProduction?"Sim":"Não"}</TableCell>
+                                    <TableCell align="center">{row.sentToProduction?"Sim":<SendToProduction saleId={row.id} refreshHandler={this.refresh} />}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

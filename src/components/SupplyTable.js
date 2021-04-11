@@ -4,7 +4,6 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios'
 import CustomTableHead from './CustomTableHead';
@@ -35,7 +34,7 @@ class SupplyTable extends React.Component {
                     <CustomTableHead header={config.supply.tableHeader} />
                         <TableBody>
                             {this.state.supplies.map((row) => (
-                                <TableRow key={row.name}>
+                                <TableRow key={row.id}>
                                     <TableCell align="center">{row.id}</TableCell>
                                     <TableCell align="center">{row.description}</TableCell>
                                     <TableCell align="center">{row.qty}</TableCell>
